@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/codesfly/aegis/schema/tool_summary.schema.json",
+  "title": "AEGIS Tool Summary",
+  "type": "object",
+  "required": ["query", "started_at", "lanes"],
+  "properties": {
+    "query": { "type": "string", "minLength": 1 },
+    "started_at": { "type": "string", "format": "date-time" },
+    "lanes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "lane",
+          "tool_call_id",
+          "run_id",
+          "requested_model",
+          "actual_model",
+          "status",
+          "error_code",
+          "duration_ms"
+        ],
+        "properties": {
+          "lane": {
+            "type": "string",
+            "enum": ["grok_scout", "gemini_scout", "qwen_scout", "grok_fusion"]
+          },
+          "tool_call_id": { "type": "string", "minLength": 1 },
+          "run_id": { "type": "string", "minLength": 1 },
+          "requested_model": { "type": "string", "minLength": 1 },
+          "actual_model": { "type": "string", "minLength": 1 },
+          "status": { "type": "string", "enum": ["ok", "error"] },
+          "error_code": { "type": "string", "minLength": 1 },
+          "duration_ms": { "type": "integer", "minimum": 0 }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

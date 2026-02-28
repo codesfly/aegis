@@ -1,0 +1,14 @@
+flowchart TD
+    A[User Query] --> B[Controller: Build State]
+    B --> C[grok_scout]
+    C -->|ok| D[gemini_scout]
+    C -->|error| Z[Fail-Fast Error]
+    D -->|ok| E[qwen_scout]
+    D -->|error| Z
+    E -->|ok| F[grok_fusion]
+    E -->|error| Z
+    F --> G[Verifier\n(trace + model_lock + alias check)]
+    G -->|pass| H[Reporter -> User Output]
+    G -->|fail| Z
+
+    Z --> O[status=error + error_code + lane_error]

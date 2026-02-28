@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/codesfly/aegis/schema/output.schema.json",
+  "title": "AEGIS Standard Output",
+  "type": "object",
+  "required": [
+    "query",
+    "status",
+    "error_code",
+    "model_trace",
+    "model_lock",
+    "lane_error",
+    "confidence",
+    "source_mix",
+    "conflict_points"
+  ],
+  "properties": {
+    "query": { "type": "string", "minLength": 1 },
+    "status": { "type": "string", "enum": ["success", "error"] },
+    "error_code": { "type": "string", "minLength": 1 },
+    "error_details": { "type": "object" },
+    "model_trace": {
+      "type": "object",
+      "required": ["grok_scout", "gemini_scout", "qwen_scout", "grok_fusion"],
+      "properties": {
+        "grok_scout": { "type": "string" },
+        "gemini_scout": { "type": "string" },
+        "qwen_scout": { "type": "string" },
+        "grok_fusion": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "model_lock": {
+      "type": "object",
+      "required": ["grok_scout", "gemini_scout", "qwen_scout", "grok_fusion"],
+      "properties": {
+        "grok_scout": { "$ref": "#/$defs/modelPair" },
+        "gemini_scout": { "$ref": "#/$defs/modelPair" },
+        "qwen_scout": { "$ref": "#/$defs/modelPair" },
+        "grok_fusion": { "$ref": "#/$defs/modelPair" }
+      },
+      "additionalProperties": false
+    },
+    "lane_error": {
+      "type": "object",
+      "required": ["grok_scout", "gemini_scout", "qwen_scout", "grok_fusion"],
+      "properties": {
+        "grok_scout": { "type": "string" },
+        "gemini_scout": { "type": "string" },
+        "qwen_scout": { "type": "string" },
+        "grok_fusion": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "confidence": { "type": "integer", "minimum": 0, "maximum": 100 },
+    "source_mix": {
+      "type": "object",
+      "required": ["authority", "realtime", "aggregator"],
+      "properties": {
+        "authority": { "type": "array", "items": { "type": "string", "format": "uri" } },
+        "realtime": { "type": "array", "items": { "type": "string", "format": "uri" } },
+        "aggregator": { "type": "array", "items": { "type": "string", "format": "uri" } }
+      },
+      "additionalProperties": false
+    },
+    "conflict_points": { "type": "array", "items": { "type": "string" } },
+    "generated_at": { "type": "string", "format": "date-time" }
+  },
+  "$defs": {
+    "modelPair": {
+      "type": "object",
+      "required": ["requested_model", "actual_model"],
+      "properties": {
+        "requested_model": { "type": "string" },
+        "actual_model": { "type": "string" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
